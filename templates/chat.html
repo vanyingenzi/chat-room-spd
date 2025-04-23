@@ -18,8 +18,7 @@
     <section id="chat">
         <ul id="messages"></ul>
         <input id="message" autocomplete="off" placeholder="Type a message…">
-        <button onclick="sendMessage()">Send</button>
-        <button onclick="leaveChat()">Leave</button>
+        <button onclick="">Send</button>
     </section>
 
     <script>
@@ -36,7 +35,7 @@
             ul.innerHTML = '';
             data.users.forEach(u => {
                 const li = document.createElement('li');
-                li.textContent = `${u.username} (${u.ip}) - ${u.city}, ${u.region}, ${u.country}`;
+                li.textContent = `${u.username} (${u.ip})`;
                 ul.appendChild(li);
             });
         });

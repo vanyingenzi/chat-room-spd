@@ -46,8 +46,7 @@ def handle_join(data):
     username = data['username']
     sid = request.sid
     # TODO : Get the user's IP address and geolocation
-    ip_info = get_ip_info(request.remote_addr)
-    print(ip_info)
+    ip_info = {}
     join_room(room)
     rooms[room][sid] = {'username': username, **ip_info}
     # Notify all clients in room of updated user list
