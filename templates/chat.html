@@ -36,7 +36,7 @@
             ul.innerHTML = '';
             data.users.forEach(u => {
                 const li = document.createElement('li');
-                li.textContent = `${u.username} (${u.ip}) - ${u.country}`;
+                li.textContent = `${u.username} (${u.ip}) - ${u.city}, ${u.region}, ${u.country}`;
                 ul.appendChild(li);
             });
         });
