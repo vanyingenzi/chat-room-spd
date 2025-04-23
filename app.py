@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'secret!')
 socketio = SocketIO(app)
 
-# Track users per room: { room: { sid: { 'username': ..., 'ip': ... } } }
+# Track users per room: { room: { sid: { 'username': ..., 'ip': ..., 'country': ... } } }
 rooms = defaultdict(dict)
 
 
@@ -30,12 +30,12 @@ def get_ip_info(ip):
     try:
         resp = requests.get(f'http://ip-api.com/json/{ip}')
         geo = resp.json()
-        return jsonify({
-            "country": resp.get('country'),
-            "region": resp.get('regionName'),
-            "city": resp.get('city'),
+        return {
+            "country": geo.get('country'),
+            "region": geo.get('regionName'),
+            "city": geo.get('city'),
             "ip": ip
-        })
+        }
     except requests.RequestException:
         return {}
 
@@ -45,10 +45,11 @@ def handle_join(data):
     room = data['room']
     username = data['username']
     sid = request.sid
-    # TODO : Get the user's IP address
-    # TODO: Get IP address of user
+    # TODO : Get the user's IP address and geolocation
+    ip_info = get_ip_info(request.remote_addr)
+    print(ip_info)
     join_room(room)
-    rooms[room][sid] = {'username': username}
+    rooms[room][sid] = {'username': username, **ip_info}
     # Notify all clients in room of updated user list
     users = list(rooms[room].values())
     emit('user_list', {'users': users}, room=room)
